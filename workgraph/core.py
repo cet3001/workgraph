@@ -199,11 +199,11 @@ class WorkGraph:
         self._event("released", agent, task_id, reason)
 
     @_atomic
-    def register_agent(self, name: str) -> None:
-        if not name.strip():
-            raise ValueError("Agent name required")
-        self.db.execute("MERGE (a:Agent {name: $name}) SET a.state = 'alive', a.last_seen = $now",
-                        {"name": name, "now": time.time()})
+    def register_agent(self, name: str, heartbeat_interval: float = 5.0) -> None:
+        if not name.strip() or not math.isfinite(heartbeat_interval) or heartbeat_interval <= 0:
+            raise ValueError("Agent name and positive finite heartbeat interval required")
+        self.db.execute("MERGE (a:Agent {name: $name}) SET a.state = 'alive', a.last_seen = $now, a.heartbeat_interval = $interval",
+                        {"name": name, "now": time.time(), "interval": heartbeat_interval})
         self._event("agent_registered", name, "", "")
 
     @_atomic

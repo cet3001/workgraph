@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 .DS_Store
 *.rlf.lock
+
+/demo.rlf/
+/demo_out/
+/.demo2.lock

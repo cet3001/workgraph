@@ -270,7 +270,8 @@ def test_sigkill_crash_recovery(tmp_path):
         reopened.close()
 
 
-def test_heartbeat_renewal_and_graceful_sigterm(graph, tmp_path):
+@pytest.mark.parametrize("stop_signal", [signal.SIGTERM, signal.SIGINT])
+def test_heartbeat_renewal_and_graceful_stop(graph, tmp_path, stop_signal):
     tid = graph.add_task("slow", "slow")
     following = graph.add_task("must stay open", "next", [tid])
     marker = tmp_path / "started"
@@ -278,7 +279,7 @@ def test_heartbeat_renewal_and_graceful_sigterm(graph, tmp_path):
     try:
         wait_for(marker.exists, [child])
         initial = graph.get_task(tid)["lease_expires"]
-        child.terminate()
+        child.send_signal(stop_signal)
         assert child.poll() is None
         wait_for(lambda: graph.get_task(tid)["lease_expires"] > initial + 1.5, [child])
         assert graph.recover_orphans() == []

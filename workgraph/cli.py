@@ -25,6 +25,8 @@ def main(argv: list[str] | None = None) -> int:
     add.add_argument("--depends-on", nargs="+", default=[])
     worker = commands.add_parser("worker")
     worker.add_argument("name")
+    worker.add_argument("--heartbeat-interval", type=float, default=5.0)
+    worker.add_argument("--claim-ttl", type=float, default=45.0)
     worker.add_argument("--module", help="Importable module exporting handler(task) -> str")
     status = commands.add_parser("status")
     query = commands.add_parser("query")
@@ -48,7 +50,7 @@ def main(argv: list[str] | None = None) -> int:
                 handler = getattr(importlib.import_module(parent), attribute)
             else:
                 handler = getattr(module, "handler")
-        Worker(args.name, args.db, handler).run()
+        Worker(args.name, args.db, handler, args.heartbeat_interval, args.claim_ttl).run()
         return 0
     graph = WorkGraph(args.path if args.command == "init" else args.db)
     try:

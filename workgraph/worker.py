@@ -46,12 +46,13 @@ class Worker:
                 errors.append(exc)
                 self.stop()
 
-        previous = signal.getsignal(signal.SIGTERM)
-        signal.signal(signal.SIGTERM, lambda signum, frame: self.stop())
+        previous = {sig: signal.getsignal(sig) for sig in (signal.SIGTERM, signal.SIGINT)}
+        for sig in previous:
+            signal.signal(sig, lambda signum, frame: self.stop())
         thread = threading.Thread(target=heartbeat, name=f"{self.name}-heartbeat", daemon=True)
         started = False
         try:
-            graph.register_agent(self.name)
+            graph.register_agent(self.name, self.heartbeat_interval)
             thread.start()
             started = True
             while not self._stop.is_set():
@@ -87,4 +88,5 @@ class Worker:
                 graph.mark_dead(self.name)
             finally:
                 graph.close()
-                signal.signal(signal.SIGTERM, previous)
+                for sig, handler in previous.items():
+                    signal.signal(sig, handler)
