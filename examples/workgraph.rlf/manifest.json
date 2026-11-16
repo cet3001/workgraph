@@ -1,0 +1,58 @@
+{
+  "format_version": 5,
+  "next_node_id": 14,
+  "next_rel_id": 25,
+  "checkpoint_lsn": 15,
+  "commit_ts": 15,
+  "node_parts": [
+    {
+      "path": "nodes/0-262144-06eaf7d080d548beeee14e08eefad2d2.parquet",
+      "id_lo": 0,
+      "id_hi": 262144,
+      "rows": 14,
+      "bytes": 5659
+    }
+  ],
+  "rel_parts": [
+    {
+      "path": "relationships/0-262144-d27ef355f81d1a010294be6ad916154d.parquet",
+      "id_lo": 0,
+      "id_hi": 262144,
+      "rows": 23,
+      "bytes": 1395
+    }
+  ],
+  "bytes_per_node": 404.23915752672974,
+  "bytes_per_rel": 60.654863103936094,
+  "codec": "parquet",
+  "indexes": [],
+  "constraints": [],
+  "theater": {
+    "databases": {
+      "neo4j": [
+        25,
+        false
+      ],
+      "system": [
+        25,
+        false
+      ],
+      "system_ontologies": [
+        25,
+        false
+      ]
+    },
+    "index_details": {},
+    "index_options": {},
+    "graph_types": {},
+    "current_graph_type": {
+      "node_types": [],
+      "edge_types": [],
+      "constraints": [],
+      "drop_constraint_names": []
+    },
+    "derived_constraints": {}
+  },
+  "query_engine": "in-memory",
+  "write_engine": "local"
+}
