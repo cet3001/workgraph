@@ -1,0 +1,4 @@
+WG-101|fix|Fence expired worker leases
+WG-102|feature|Show task lineage
+WG-103|fix|Recover interrupted work
+WG-104|docs|Explain the shared store

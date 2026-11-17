@@ -23,6 +23,7 @@ import time
 
 from workgraph.core import WorkGraph
 from workgraph.server import serve
+from workgraph.queries import Queries
 
 TASKS = [
     ("Map the legacy checkout flow", []),
@@ -88,6 +89,8 @@ def main() -> None:
     latest = [wg.snapshot()]
     if not args.no_ui:
         threading.Thread(target=serve, args=(lambda: latest[0],),
+                         kwargs={"get_lineage": Queries(wg).lineage,
+                                 "get_critical_path": Queries(wg).critical_path},
                          daemon=True).start()
 
     agents = [
